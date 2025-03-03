@@ -1,0 +1,6 @@
+---
+- name: terraform
+  hosts: 
+  become: true
+  roles:
+    - start-terraform

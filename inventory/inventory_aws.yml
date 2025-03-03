@@ -1,0 +1,12 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:Environment: "ubuntu workspaces-production"
+aws_profile: default
+keyed_groups:
+  - key: tags.Name
+    Value: myworkspaceuser-prod
+compose:
+  ansible_host: instance_id
+  ansible_connection: aws_ssm

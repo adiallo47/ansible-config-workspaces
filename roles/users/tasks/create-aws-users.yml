@@ -1,0 +1,6 @@
+---
+- name: Create IAM Users
+  amazon.aws.iam_user:
+    name: "{{ item.username }}"
+    state: present
+  loop: "{{ users }}"

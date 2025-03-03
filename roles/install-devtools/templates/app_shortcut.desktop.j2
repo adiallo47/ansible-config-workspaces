@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name={{ item.name }}
+Exec={{ item.exec }}
+Icon={{ item.icon }}
+Terminal={{ item.terminal | default('false') }}
+Categories={{ item.categories | default('Utility') }};
+StartupNotify=true

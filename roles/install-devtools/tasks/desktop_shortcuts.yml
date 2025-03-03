@@ -1,0 +1,19 @@
+---
+- name: Ensure Desktop directory exists
+  file:
+    path: "/home/{{ ansible_user }}/Desktop"
+    state: directory
+    mode: '0755'
+
+- name: desktop shortcuts
+  template:
+    src: "app_shortcut.desktop.j2"
+    dest: "/home/{{ ansible_user }}/Desktop/{{ item.name | lower | replace(' ', '_') }}.desktop"
+    mode: '0755'
+  loop: "{{ applications }}"
+
+- name: shortcuts executable
+  file:
+    path: "/home/{{ ansible_user }}/Desktop/{{ item.name | lower | replace(' ', '_') }}.desktop"
+    mode: '0755'
+  loop: "{{ applications }}"

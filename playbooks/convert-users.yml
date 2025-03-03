@@ -1,0 +1,11 @@
+---
+- name: Convert User List from YAML to JSON
+  hosts: localhost
+  gather_facts: no
+  roles:
+  
+    - name: Generate JSON from YAML
+      copy:
+        dest: "{{ playbook_dir }}/users.json"
+        content: |
+          {{ lookup('file', '../group_vars/main.yml') | from_yaml | to_json | to_nice_json }}

@@ -1,0 +1,13 @@
+---
+- name: Install tools to Raspberry Pi
+  hosts: dou
+  become: true
+  roles:
+    - install-devtools
+
+  tasks:
+    - name: Update package
+      apt:
+        update_cache: yes
+        upgrade: dist
+        state: present

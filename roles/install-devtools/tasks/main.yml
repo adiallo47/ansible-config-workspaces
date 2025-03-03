@@ -1,0 +1,26 @@
+---
+- name: Install Google Chrome
+  include_tasks: googlechrome.yml
+
+- name: Install Firefox
+  include_tasks: firefox.yml
+
+- name: Install dev tools
+  include_tasks: devtools.yml
+
+- name: Install web dev tools
+  include_tasks: webdevtools.yml
+
+- name: Install security tools
+  include_tasks: sectools.yml 
+
+- name: Install VS code
+  include_tasks: vscode.yml
+
+- name: Install desktop shortcuts
+  include_tasks: desktop_shortcuts.yml
+  tags: shortcuts
+
+- name: Restart Raspberry Pi
+  command: echo "Rebooting"
+  notify : Restart VM

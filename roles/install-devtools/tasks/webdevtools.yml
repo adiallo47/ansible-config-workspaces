@@ -1,0 +1,7 @@
+---
+- name: Install web dev tools
+  apt:
+    name:
+      - apache2
+      - php
+    state: present

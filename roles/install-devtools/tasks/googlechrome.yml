@@ -1,0 +1,46 @@
+---
+- name: check pi and the OS type
+  command: dpkg --print-architecture
+  register: arch_result
+  changed_when: false
+
+- name: Debug architecture result
+  debug:
+    msg: "System architecture detected: {{ arch_result.stdout }}"
+
+- name: Ensure dependencies for Google Chrome are installed
+  apt:
+    name:
+      - wget
+      - curl
+      - libcamera0.3
+      - libwlroots12
+      - linux-headers-6.6.51+rpt-common-rpi
+      - linux-headers-6.6.51+rpt-rpi-2712
+      - linux-headers-6.6.51+rpt-rpi-v8
+      - linux-image-6.6.51+rpt-rpi-2712
+      - linux-image-6.6.51+rpt-rpi-v8
+      - linux-kbuild-6.6.51+rpt
+      - lxplug-network
+    state: present
+    update_cache: yes
+  when: arch_result.stdout | trim == "arm64"
+
+- name: Install Chromium (since Google Chrome is not available for ARM64)
+  apt:
+    name: chromium-browser
+    state: present
+    update_cache: yes
+  when: arch_result.stdout | trim == "arm64"
+
+- name: Verify Chromium Installation
+  command: chromium-browser --version
+  register: chrome_version
+  changed_when: false
+  ignore_errors: true
+  when: arch_result.stdout | trim == "arm64"
+
+- name: Show Installed Chromium Version
+  debug:
+    msg: "Installed Chromium version: {{ chrome_version.stdout }}"
+  when: arch_result.stdout | trim == "arm64"

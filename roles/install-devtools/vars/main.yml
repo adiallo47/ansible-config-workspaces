@@ -1,0 +1,18 @@
+ansible_user: amadoudiallo
+ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+applications:
+  - name: "Visual Studio Code"
+    exec: "/usr/bin/code %F"
+    icon: "/usr/share/pixmaps/code.png"
+    categories: "Development;IDE"
+
+  - name: "Google Chrome"
+    exec: "/usr/bin/chromium-browser %U"
+    icon: "/usr/share/icons/hicolor/128x128/apps/chromium-browser.png"
+    categories: "Network;WebBrowser"
+
+  - name: "Firefox"
+    exec: "/usr/bin/firefox %U"
+    icon: "/usr/share/icons/hicolor/128x128/apps/firefox.png"
+    categories: "Network;WebBrowser"

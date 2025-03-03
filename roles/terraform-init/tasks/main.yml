@@ -1,0 +1,27 @@
+---
+
+- name: Provision AWS WorkSpaces with Terraform
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Ensure Terraform is Installed
+      command: terraform --version
+      register: terraform_version
+      changed_when: false
+
+    - name: Initialize Terraform
+      command:
+        cmd: terraform init
+        chdir: "{{ playbook_dir }}/../terraform"  # Adjust path to Terraform directory
+
+    - name: Apply Terraform Configuration
+      command:
+        cmd: terraform apply -auto-approve
+        chdir: "{{ playbook_dir }}/../terraform"  # Adjust path to Terraform directory
+      register: terraform_output
+
+    - name: Display Terraform Output
+      debug:
+        msg: "{{ terraform_output.stdout_lines }}"

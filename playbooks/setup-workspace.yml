@@ -1,0 +1,10 @@
+---
+- name: Configure AWS WorkSpaces
+  hosts: workspace_*
+  become: yes
+  tasks:
+    - name: Update all packages
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes

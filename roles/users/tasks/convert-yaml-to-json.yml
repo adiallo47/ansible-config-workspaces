@@ -1,0 +1,6 @@
+---
+- name: Generate user.yml to users.json
+  copy:
+    dest: "{{ playbook_dir }}/../../users.json"
+    content: |
+        {{ lookup('file', '../group_vars/main.yml') | from_yaml | to_json | to_nice_json }}

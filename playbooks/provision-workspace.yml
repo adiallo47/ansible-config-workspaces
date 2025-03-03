@@ -1,0 +1,29 @@
+---
+# - name: Create AWS Directory Users
+#   hosts: localhost
+#   gather_facts: no
+#   vars_files:
+#     - "../group_vars/main.yml"
+#   roles:
+#     - users
+
+# - name: Run Terraform to Deploy WorkSpaces
+#   hosts: localhost
+#   gather_facts: no
+#   tasks:
+#     - name: Initialize Terraform
+#       command: terraform init
+#       args:
+#         chdir: "../../terraform/"
+
+#     - name: Apply Terraform Plan
+#       command: terraform apply -auto-approve
+#       args:
+#         chdir: "../../terraform/"
+
+- name: Automate WorkSpaces for New Users
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - users  # Runs `convert-yaml-to-json.yml`
+    - install-workspaces  # Runs Terraform provisioning

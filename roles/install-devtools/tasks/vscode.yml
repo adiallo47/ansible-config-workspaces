@@ -1,0 +1,27 @@
+---
+- name: Update package lists
+  apt:
+    update_cache: yes
+
+- name: Install dependencies for VS Code
+  apt:
+    name:
+      - software-properties-common
+      - apt-transport-https
+      - wget
+    state: present
+
+- name: Add Microsoft GPG Key
+  shell: wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | tee /usr/share/keyrings/microsoft-archive-keyring.gpg > /dev/null
+
+- name: Add Microsoft repository
+  shell: echo "deb [arch=arm64 signed-by=/usr/share/keyrings/microsoft-archive-keyring.gpg] https://packages.microsoft.com/repos/code stable main" | tee /etc/apt/sources.list.d/vscode.list
+
+- name: Update package lists after adding VS Code repository
+  apt:
+    update_cache: yes
+
+- name: Install Visual Studio Code
+  apt:
+    name: code
+    state: present

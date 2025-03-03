@@ -1,0 +1,7 @@
+---
+- name: Install security tools
+  apt:
+    name:
+      - wireshark
+      - nmap
+    state: present

@@ -1,0 +1,13 @@
+---
+- name: Install workspaces to Raspbery Pi
+  hosts: dou
+  become: true
+  roles:
+    - install-workspaces
+
+  tasks:
+    - name: Update package
+      apt:
+        update_cache: yes
+        upgrade: dist
+        state: present

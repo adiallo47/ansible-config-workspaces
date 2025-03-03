@@ -1,0 +1,14 @@
+---
+- name: Install dev tools
+  apt:
+    name:
+      - git
+      - curl
+      - wget
+      - build-essential
+      - unzip
+      - vim
+      - nano
+      - nodejs
+      - npm
+    state: present

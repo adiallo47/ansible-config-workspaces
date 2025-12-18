@@ -1,1 +1,1 @@
-users.yml
+group_vars/*.yml

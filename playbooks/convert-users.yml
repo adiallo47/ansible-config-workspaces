@@ -2,10 +2,45 @@
 - name: Convert User List from YAML to JSON
   hosts: localhost
   gather_facts: no
-  roles:
-  
-    - name: Generate JSON from YAML
+  tasks:
+    - name: Read users.yml and save as JSON
       copy:
-        dest: "{{ playbook_dir }}/users.json"
-        content: |
-          {{ lookup('file', '../group_vars/main.yml') | from_yaml | to_json | to_nice_json }}
+        content: "{{ lookup('file', '../group_vars/users.yml') | from_yaml | to_nice_json }}"
+        dest: "/Users/amadoudiallo/ideaprojects/workspace-deployment/terraform-infrastructure/users.json"
+
+- name: Create AWS Directory Users
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Get AWS Directory Service ID
+      shell: aws ds describe-directories --query "DirectoryDescriptions[?Name=='Dous-Directory-WorkSpaces.local'].DirectoryId" --output text
+      register: directory_service
+
+    - name: Set AWS Directory Service ID as a fact
+      set_fact:
+        aws_directory_id: "{{ directory_service.stdout }}"
+
+    - name: Get EC2 Instance ID
+      shell: aws ec2 describe-instances --filters "Name=tag:Name,Values=SSM-Workspace-Instance" --query "Reservations[*].Instances[*].InstanceId" --output text
+      register: ec2_instance
+
+    - name: Set EC2 Instance ID as a fact
+      set_fact:
+        instance_id: "{{ ec2_instance.stdout }}"
+
+- name: Ensure users exist in AWS Directory Service
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Load users from YAML
+      set_fact:
+        users: "{{ lookup('file', '/Users/amadoudiallo/ideaprojects/workspace-deployment/ansible-config/group_vars/users.yml') | from_yaml | json_query('users') }}"
+
+    - name: Create users inside EC2 instance
+      command: >
+        aws ssm send-command
+        --document-name "AWS-RunShellScript"
+        --targets "Key=instanceIds,Values={{ instance_id }}"
+        --parameters "commands=['sudo dsadd user CN={{ item.username }},CN=Users,DC=yourdomain,DC=com -pwd TempPassword123! -mustchpwd yes -memberof CN=Users,DC=yourdomain,DC=com']"
+        --region us-east-1
+      loop: "{{ users }}"
